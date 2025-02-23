@@ -3,6 +3,7 @@ const path = require('path');
 const axios = require('axios');
 const { exec } = require('child_process');
 const { promisify } = require('util');
+const ffmpeg = require('ffmpeg-static');
 const execAsync = promisify(exec);
 
 exports.handler = async function(event, context) {
@@ -91,8 +92,8 @@ exports.handler = async function(event, context) {
     
     const fileContent = audioFiles.map(file => `file '${file}'`).join('\n');
     fs.writeFileSync(fileList, fileContent);
-
-    await execAsync(`ffmpeg -f concat -safe 0 -i ${fileList} -c copy ${outputFile}`);
+    const ffmpegCommand = `${ffmpeg} -f concat -safe 0 -i ${fileList} -c copy ${outputFile}`;
+    await execAsync(ffmpegCommand)
 
     // Read the final audio file
     const finalAudio = fs.readFileSync(outputFile);
