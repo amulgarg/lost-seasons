@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: dialogue-parser
+    env: node
+    buildCommand: npm install
+    startCommand: node .
+    envVars:
+      - key: ELEVENLABS_API_KEY
+        sync: false
